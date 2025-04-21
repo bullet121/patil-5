@@ -1,0 +1,201 @@
+10)Write shell script for identifying the entered number is positive, negative or zero
+using if-then-elif structure. Make the program interactive.
+
+nano check.sh ---------- create the file and paste the code in it
+chmod +x check.sh ---------- to make file executable
+./check.sh --------------- to run that file
+
+code-
+#!/bin/bash
+
+# Interactive input
+echo "Enter a number:"
+read num
+
+# Check if number is positive, negative or zero
+if [ $num -gt 0 ]
+then
+    echo "The number $num is Positive."
+elif [ $num -lt 0 ]
+then
+    echo "The number $num is Negative."
+else
+    echo "The number is Zero."
+fi
+
+11 Write shell script for identifying the entered number is single digit, double digit, three
+digit or four digit number using case structure. Make the program interactive.
+
+
+code -
+#!/bin/bash
+
+# Interactive input
+echo "Enter a number:"
+read num
+
+# Remove any negative sign for digit count
+abs_num=${num#-}
+
+# Get number of digits using length
+digit_count=${#abs_num}
+
+# Use case structure
+case $digit_count in
+    1)
+        echo "The number $num is a Single Digit number."
+        ;;
+    2)
+        echo "The number $num is a Double Digit number."
+        ;;
+    3)
+        echo "The number $num is a Three Digit number."
+        ;;
+    4)
+        echo "The number $num is a Four Digit number."
+        ;;
+    *)
+        echo "The number $num has more than Four Digits."
+        ;;
+esac
+
+
+12 Write a shell script to create a directory. Program should ask the directory name.
+Make a provision to check the same directory exists or not? If exist display a message
+else create the directory.
+
+code-
+#!/bin/bash
+
+# Ask for directory name
+echo "Enter the name of the directory to create:"
+read dirname
+
+# Check if directory already exists
+if [ -d "$dirname" ]; then
+    echo "Directory '$dirname' already exists."
+else
+    mkdir "$dirname"
+    echo "Directory '$dirname' created successfully."
+fi
+
+
+13 Write a shell script to calculate factorial of a number using for loop
+
+code-
+
+#!/bin/bash
+
+# Ask user to enter a number
+echo "Enter a number:"
+read num
+
+# Initialize factorial to 1
+fact=1
+
+# Check if number is zero or positive
+if [ $num -lt 0 ]; then
+    echo "Factorial is not defined for negative numbers."
+else
+    for (( i=1; i<=num; i++ ))
+    do
+        fact=$((fact * i))
+    done
+    echo "Factorial of $num is: $fact"
+fi
+
+
+14 Write a shell script to calculate factorial of a number using while loop.
+
+code-
+#!/bin/bash
+
+# Ask user to enter a number
+echo "Enter a number:"
+read num
+
+# Initialize factorial and counter
+fact=1
+i=1
+
+# Check for negative input
+if [ $num -lt 0 ]; then
+    echo "Factorial is not defined for negative numbers."
+else
+    while [ $i -le $num ]
+    do
+        fact=$((fact * i))
+        i=$((i + 1))
+    done
+    echo "Factorial of $num is: $fact"
+fi
+
+
+15 Write shell script program for login details such as
+for listing all the user accounts name
+for counting the number of logged-in user accounts
+for listing the names of currently logged-in users
+for checking the groups to which the current user belong
+
+code-
+#!/bin/bash
+
+echo "====== LOGIN DETAILS SCRIPT ======"
+
+# 1. Listing all user account names
+echo -e "\n1. All user account names:"
+cut -d: -f1 /etc/passwd
+
+# 2. Counting number of logged-in user accounts
+echo -e "\n2. Number of logged-in user accounts:"
+who | cut -d' ' -f1 | sort | uniq | wc -l
+
+# 3. Listing names of currently logged-in users
+echo -e "\n3. Currently logged-in users:"
+who | cut -d' ' -f1 | sort | uniq
+
+# 4. Checking groups of current user
+echo -e "\n4. Groups to which current user ($USER) belongs:"
+groups
+
+
+16 Write a shell script to show various system configuration like currently logged user
+and his login name, your current shell, home directory, operating system type, current
+path setting, current working directory.
+
+code-
+
+#!/bin/bash
+
+echo "====== SYSTEM CONFIGURATION DETAILS ======"
+
+# Currently logged user
+echo -e "\n1. Currently logged-in user:"
+whoami
+
+# Login name
+echo -e "\n2. Login name:"
+logname
+
+# Current shell
+echo -e "\n3. Current shell:"
+echo $SHELL
+
+# Home directory
+echo -e "\n4. Home directory:"
+echo $HOME
+
+# Operating system type
+echo -e "\n5. Operating system type:"
+uname -o
+
+# Current PATH setting
+echo -e "\n6. Current PATH setting:"
+echo $PATH
+
+# Current working directory
+echo -e "\n7. Current working directory:"
+pwd
+
+
+

@@ -1,0 +1,252 @@
+1)Explain and show the execution of basic Linux file related commands with different
+options for each commands:
+pwd ,cd ,ls ,mkdir , rmdir ,cp, mv , touch, ,rm.
+
+i) List all the contents of home directory with different options
+ls -l – Long listing format
+
+ls -a – Includes hidden files
+
+ls -la – Long list + hidden files
+
+ls -lh – Human-readable sizes
+
+ii) Create a directory of your name
+mkdir SumedhV
+
+iii) Create a blank text file using touch command in your directory
+cd SumedhV
+touch name.txt --------- Add text to the file
+
+iv) Copy the text to name2.txt using cp and mv command. Explain the
+difference between them
+touch name2.txt
+cp name.txt name2.txt ------- using cp command text is copied from name to name2
+mv name.txt name2.txt ------  mv command is used to move or rename the file
+
+v)Delete the files created by you and the directory.
+rm name2.txt ---- to remove the file in the directory
+cd ---- to come back to home directory
+rmdir SumedhV ------- to remove the empty directory
+
+vi) Display the working directory.
+pwd
+
+
+2)   
+i) Create two blank text files (f1.txt and f2.txt) using touch command.
+touch f1.txt f2.txt
+
+ii)Append your name, roll number, name of subject to f1.txt using cat
+command 
+
+cat >> f1.txt ------------- add the content to the file 1 (Ctrl +z) to save and exit
+
+iii)Append Department name and college name and name of city to f2.txt
+using cat command.
+
+cat >> f2.txt 
+
+iv) Display both contents using cat command.
+
+cat f1.txt f2.txt ------------ to display all the content
+
+V)Combine both files to a new file f3.txt using cat command.
+
+cat f1.txt f2.txt > f3.txt --- to shift the content of f1 and f2 to f3 file
+
+cat f3.txt ------ display
+
+
+3)
+i) Create a txt file of manual pages of ls command cat and redirect command.
+mrsv@JARVIS:~$ man ls > ls_manual.txt ------- To create and add the manual pages 
+mrsv@JARVIS:~$ man cat > cat_manual.txt
+mrsv@JARVIS:~$ man bash > bash_manual.txt
+
+ii) Demonstrate top and bottom command with default and with different
+options
+
+top  ---------- press q to exit
+
+sudo apt install btm ----------- if not available
+
+btm ----------  press q to exit
+
+iii) Demonstrate the use of sort, wc and grep commands
+
+create a file and add content to it
+mrsv@JARVIS:~$ mkdir linux
+mrsv@JARVIS:~$ cd linux
+mrsv@JARVIS:~/linux$ touch sample.txt
+mrsv@JARVIS:~/linux$ cat >> sample.txt
+apple 
+banana
+greps
+mango
+pineapple
+pumkin  ^Z
+[4]+  Stopped                 cat >> sample.txt
+mrsv@JARVIS:~/linux$ sort sample.txt
+apple 
+banana
+greps
+mango
+pineapple
+
+sort -r --------- for reverse sort
+
+wc command -
+
+wc sample.txt -----  Output: lines, words, and characters.
+wc -l
+wc -w
+wc -c
+
+grep command -
+
+grep "apple" sample.txt ---------- used to search the word in file
+
+grep -n "apple" sample.txt ---------- to search by line number
+
+
+piping command -
+
+grep "apple" sample.txt | wc -l ------------ used to combine multiple command 
+
+sort sample.txt | uniq ---------- it is used to sort and remove duplicate lines
+
+
+4 What is Vi-editor? Write down commands for performing following operations: cut,
+copy, paste, move around the file. Create a text file using vi editor and demonstrate
+above mentioned.
+
+
+vi new.txt ------ create a new file in vi editor
+press i to insert mode
+
+add content 
+
+dd ---- cut
+yy ---- copy
+p------ paste
+
+:wq ----------- save and exit
+
+
+
+5 Create file filepermission.txt using touch/gedit/vi commands and change file
+permissions by
+i) Using letters
+ii) Using numbers
+user  read ,write and execute
+group read and execute
+other  read
+
+touch filepermission.txt
+
+chmod u=rwx,g=rx,o=r filepermission.txt -------- changing permission using letters
+
+chmod 754 filepermission.txt ------------ changing permission using numbers.
+
+ls -l ---- for the display of file
+
+
+6 What do you mean by managing users and groups in Linux?
+
+i) Add a new user to the system using command line (username: practexam).
+
+sudo adduser practexam
+
+new password amd then set name and roll number .... 
+
+
+ii) Demonstrate the password changing of the user crated.
+
+sudo passwd practexam -------- to change the password
+
+iii) Add user created to other group (you can create group)
+
+mrsv@JARVIS:~/linux$ sudo groupadd examgroup
+mrsv@JARVIS:~/linux$ sudo usermod -aG examgroup practexam
+mrsv@JARVIS:~/linux$ groups practexam
+practexam : practexam users examgroup
+
+iv) Delete the user created and the group.
+
+sudo deluser practexam --------------- delete the practexam
+
+suduo groupdel examgroup ---------- delete the group
+
+
+
+7 What do you mean by software management in Linux.
+
+i) Demonstrate installation of vlc media player using synaptic package
+manager. (If synaptic package manager is not available, you are required
+to add it.)
+
+sudo apt install synaptic ----------  to install the synaptic
+
+open synaptic
+search for vlc and then right click mark for installation and then click on "Apply"
+
+ii) Remove the package installed using synaptic package manager
+to remove
+
+search vlc and then right click and mark for removal and then click on "Apply"
+
+
+
+8 What do you mean by software management in Linux.
+
+i) Demonstrate installation of vlc media player using apt package manager
+
+sudo apt install vlc
+
+ii) Completely remove and purge the software installed using apt command.
+sudo apt remove vlc ---------- to remove the vlc
+
+sudo apt purge vlc ---------  to remove compltely 
+
+
+9 Explain and show the execution of basic network troubleshooting Linux commands
+with different options for each commands:
+i) ifconfig
+ii) ping
+ping google.com ---------- to find ip of google
+ping -c 4 google.com  -------------- to run 4 times 
+
+iii) netstat
+Show all active connections: netstat -a
+Show only TCP connections: netstat -t
+Show listening ports: netstat -l
+Show routing table: netstat -r
+
+iv) route 
+
+route - to add the routhing table
+route -n for more detailed version
+
+v) host
+host google.com
+host 8.8.8.8 
+vi) arp
+View arp table : arp -a
+Delete and entry : sudo arp -d 192.168.1.1
+
+vii) tracroute
+Trace route to a domain: traceroute google.com
+Set maximum hops: traceroute -m 10 google.com
+viii) hostname
+ It is used to display systems host name.
+sudo hostname mynewhost --------- to add new host
+
+
+
+
+
+
+
+
+
