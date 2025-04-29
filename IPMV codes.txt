@@ -1,0 +1,1112 @@
+[1].Perform the following operations on digital image:
+
+1. Read color image and convert to gray scale
+2. Display size, shape, class, datatype of color and gray scale image
+3. Resize (reduce ) the size of image to half
+4. Rotate the original image left-right, top-bottom
+5. Extract image pixels (few rows and columns) and display it as image
+6. Modify some image pixels (as white or black) and display modified
+imag
+
+code-
+
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+
+# 1. Read color image and convert to gray scale
+color_image = cv2.imread('lena.jpeg')  # give your image name here
+gray_image = cv2.cvtColor(color_image, cv2.COLOR_BGR2GRAY)
+
+# 2. Display size, shape, class, datatype of color and gray scale image
+print("Color Image Shape:", color_image.shape)
+print("Color Image Size:", color_image.size)
+print("Color Image Class:", type(color_image))
+print("Color Image Datatype:", color_image.dtype)
+
+print("Gray Image Shape:", gray_image.shape)
+print("Gray Image Size:", gray_image.size)
+print("Gray Image Class:", type(gray_image))
+print("Gray Image Datatype:", gray_image.dtype)
+
+# 3. Resize (reduce) the size of image to half
+height = color_image.shape[0]
+width = color_image.shape[1]
+resized_image = cv2.resize(color_image, (width//2, height//2))
+
+# 4. Rotate the original image left-right, top-bottom
+flip_lr = cv2.flip(color_image, 1)  # Left-Right flip
+flip_tb = cv2.flip(color_image, 0)  # Top-Bottom flip
+
+# 5. Extract image pixels (few rows and columns) and display it as image
+cropped_image = color_image[50:200, 100:300]
+
+# 6. Modify some image pixels (as white or black) and display modified image
+modified_image = color_image.copy()
+modified_image[100:150, 100:150] = [255, 255, 255]  # white block
+modified_image[200:250, 200:250] = [0, 0, 0]        # black block
+
+# Display all images one by one
+
+# Show original color image
+plt.imshow(cv2.cvtColor(color_image, cv2.COLOR_BGR2RGB))
+plt.title('Original Image')
+plt.axis('off')
+plt.show()
+
+# Show gray scale image
+plt.imshow(gray_image, cmap='gray')
+plt.title('Gray Scale Image')
+plt.axis('off')
+plt.show()
+
+# Show resized image
+plt.imshow(cv2.cvtColor(resized_image, cv2.COLOR_BGR2RGB))
+plt.title('Resized Image (Half Size)')
+plt.axis('off')
+plt.show()
+
+# Show left-right flipped image
+plt.imshow(cv2.cvtColor(flip_lr, cv2.COLOR_BGR2RGB))
+plt.title('Left-Right Flipped Image')
+plt.axis('off')
+plt.show()
+
+# Show top-bottom flipped image
+plt.imshow(cv2.cvtColor(flip_tb, cv2.COLOR_BGR2RGB))
+plt.title('Top-Bottom Flipped Image')
+plt.axis('off')
+plt.show()
+
+# Show cropped image
+plt.imshow(cv2.cvtColor(cropped_image, cv2.COLOR_BGR2RGB))
+plt.title('Cropped Image')
+plt.axis('off')
+plt.show()
+
+# Show modified image
+plt.imshow(cv2.cvtColor(modified_image, cv2.COLOR_BGR2RGB))
+plt.title('Modified Image')
+plt.axis('off')
+plt.show()
+
+
+
+-----------------------------------------------------------------------------
+
+
+
+
+[2.]Perform following operations on input image (gray scale image)
+
+1. Image Negative,
+2. Log Transformation,
+3. Power Law Transformation,
+4. Contrast stretching,
+5. Bit plane extraction,
+6. Thresholding
+
+code-
+# Basic DIP Operations
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Read grayscale image
+img = cv2.imread('lena.jpeg', cv2.IMREAD_GRAYSCALE)
+
+# 1. Image Negative
+negative = 255 - img
+
+# 2. Log Transformation
+# we add 1 inside log to avoid log(0) which is undefined
+c = 255 / np.log(1 + np.max(img))
+log_transformed = c * (np.log(1 + img))
+log_transformed = np.array(log_transformed, dtype=np.uint8)
+
+# 3. Power Law Transformation (Gamma Correction)
+gamma = 0.5  # You can change gamma value
+c = 1
+power_law_transformed = c * np.power(img/255.0, gamma) * 255
+power_law_transformed = np.array(power_law_transformed, dtype=np.uint8)
+
+# 4. Contrast Stretching
+min_val = np.min(img)
+max_val = np.max(img)
+contrast_stretched = (img - min_val) * (255 / (max_val - min_val))
+contrast_stretched = np.array(contrast_stretched, dtype=np.uint8)
+
+# 5. Bit Plane Extraction
+bit_planes = []
+for i in range(8):
+    bit_plane = (img >> i) & 1
+    bit_plane = bit_plane * 255  # Make it visible
+    bit_planes.append(bit_plane)
+    
+# 6. Thresholding
+ret, thresholded = cv2.threshold(img, 127, 255, cv2.THRESH_BINARY)
+
+# Display all results
+
+# Original Image
+plt.imshow(img, cmap='gray')
+plt.title('Original Image')
+plt.axis('off')
+plt.show()
+
+# Image Negative
+plt.imshow(negative, cmap='gray')
+plt.title('Negative Image')
+plt.axis('off')
+plt.show()
+
+# Log Transformation
+plt.imshow(log_transformed, cmap='gray')
+plt.title('Log Transformed Image')
+plt.axis('off')
+plt.show()
+
+# Power Law Transformation
+plt.imshow(power_law_transformed, cmap='gray')
+plt.title('Power Law (Gamma) Image')
+plt.axis('off')
+plt.show()
+
+# Contrast Stretching
+plt.imshow(contrast_stretched, cmap='gray')
+plt.title('Contrast Stretched Image')
+plt.axis('off')
+plt.show()
+
+# Display all bit planes from 0 to 7
+for i in range(8):
+    plt.imshow(bit_planes[i], cmap='gray')
+    plt.title('Bit Plane ' + str(i))
+    plt.axis('off')
+    plt.show()
+
+# Thresholding
+plt.imshow(thresholded, cmap='gray')
+plt.title('Thresholded Image')
+plt.axis('off')
+plt.show()
+
+
+---------------------------------------------------------------------------------------
+
+
+
+3.Plot image histogram and perform histogram equilization.
+
+code-
+import numpy as np
+import cv2
+import matplotlib.pyplot as plt
+
+# Read the image in grayscale
+image = cv2.imread("lowconst.jpg", cv2.IMREAD_GRAYSCALE)
+
+# Check if the image is loaded successfully
+if image is None:
+    print("Error in reading the image!")
+    exit()
+else:
+    print("Image loaded successfully")
+
+# Display the shape and size of the image
+print("Shape of image:", image.shape)
+print("Size of image:", image.size)
+
+# Plot the original image and its histogram
+plt.figure(figsize=(10, 8))
+
+# Original Image
+plt.subplot(2, 2, 1)
+plt.imshow(image, cmap='gray')
+plt.title("Original Image")
+plt.axis('off')
+
+# Histogram of Original Image
+plt.subplot(2, 2, 2)
+plt.hist(image.ravel(), bins=256, range=[0, 256], color='red', alpha=0.8)
+plt.title("Histogram of Original Image")
+
+# Apply Histogram Equalization
+equalized_image = cv2.equalizeHist(image)
+
+# Display the Equalized Image
+plt.subplot(2, 2, 3)
+plt.imshow(equalized_image, cmap='gray')
+plt.title("Equalized Image")
+plt.axis('off')
+
+# Histogram of Equalized Image
+plt.subplot(2, 2, 4)
+plt.hist(equalized_image.ravel(), bins=256, range=[0, 256], color='blue', alpha=0.8)
+plt.title("Histogram of Equalized Image")
+
+plt.tight_layout()
+plt.show()
+
+
+
+----------------------------------------------------------------------------------------------
+
+
+4.To perform following image filtering operations in spatial domain.
+1. Averaging or smoothing
+2. Sharpening
+3. Unsharp Marsking
+4. Highboost Filtering
+5. Median Filterin
+
+
+
+
+
+
+
+1.Averagig 
+
+#Perform Smoothing(Averaging)
+import numpy as np
+import cv2
+import matplotlib.pyplot as plt
+image=cv2.imread("cameramen.jpg",cv2.IMREAD_GRAYSCALE)
+if image is None:
+ print("Error in reading the image!")
+ exit()
+else:
+ print("Image loaded successfully")
+kernel_1=np.ones((3,3),np.float32)/9
+kernel_2=np.ones((9,9),np.float32)/81
+kernel_3=np.ones((15,15),np.float32)/225
+out_img1=cv2.filter2D(image,-1,kernel_1)
+out_img2=cv2.filter2D(image,-1,kernel_2)
+out_img3=cv2.filter2D(image,-1,kernel_3)
+plt.figure(figsize=(5,5))
+plt.subplot(2,2,1)
+plt.imshow(image,cmap='gray')
+plt.title("Original Image")
+plt.axis('off')
+plt.subplot(2,2,2)
+plt.imshow(out_img1,cmap='gray')
+plt.title("Averaging by 3*3 kernel")
+plt.axis('off')
+plt.subplot(2,2,3)
+plt.imshow(out_img2,cmap='gray')
+plt.title("Averaging by 9*9 kernel")
+plt.axis('off')
+plt.subplot(2,2,4)
+plt.imshow(out_img3,cmap='gray')
+plt.title("Averaging by 15*15 kernel")
+plt.axis('off')
+plt.show()
+
+
+
+
+
+2. Sharpening
+
+#HPF or Sharpening
+import numpy as np
+import cv2
+import matplotlib.pyplot as plt
+image=cv2.imread("cameramen.jpg",cv2.IMREAD_GRAYSCALE)
+if image is None:
+ print("Error in reading the image!")
+ exit()
+
+else:
+   print("Image loaded successfully")
+hpf_kernel1=np.array([[0,-1,0],[-1,4,-1],[0,-1,0]])
+hpf_kernel2=np.array([[-1,-1,-1],[-1,8,-1],[-1,-1,-1]])
+out_img1=cv2.filter2D(image,-1,hpf_kernel1)
+out_img2=cv2.filter2D(image,-1,hpf_kernel2)
+plt.figure(figsize=(10,5))
+plt.subplot(1,3,1)
+plt.imshow(image,cmap='gray')
+plt.title("Original Image")
+plt.axis('off')
+plt.subplot(1,3,2)
+plt.imshow(out_img1,cmap='gray')
+plt.title("Sharpened Filter1")
+plt.axis('off')
+plt.subplot(1,3,3)
+plt.imshow(out_img2,cmap='gray')
+plt.title("Sharpened Filter2")
+plt.axis('off')
+plt.show()
+
+
+
+
+
+
+3. Unsharp and highboost
+
+#Unsharp Masking
+import numpy as np
+import cv2
+import matplotlib.pyplot as plt
+image=cv2.imread("cameramen.jpg",cv2.IMREAD_GRAYSCALE)
+if image is None:
+ print("Error in reading the image!")
+ exit()
+else:
+ print("Image loaded successfully")
+blurredimage=cv2.GaussianBlur(image,(5,5),0)
+gmask=image-blurredimage
+k1=1
+out_1=image+k1*gmask
+k2=2
+out_2=image+k2*gmask
+5
+plt.figure(figsize=(10,5))
+plt.subplot(3,2,1)
+plt.imshow(image,cmap='gray')
+plt.title("Original Image")
+plt.axis('off')
+plt.subplot(3,2,2)
+plt.imshow(blurredimage,cmap='gray')
+plt.title("Blurred Image")
+plt.axis('off')
+plt.subplot(3,2,3)
+plt.imshow(gmask,cmap='gray')
+plt.title("Mask Image")
+plt.axis('off')
+plt.subplot(3,2,4)
+plt.imshow(out_1,cmap='gray')
+plt.title("Unsharp Masking")
+plt.axis('off')
+plt.subplot(3,2,5)
+plt.imshow(out_2,cmap='gray')
+plt.title("High Boost Filtering(k=2)")
+plt.axis('off')
+plt.show()
+
+
+
+
+
+4. Median filter
+
+#Median Filtering
+import numpy as np
+import cv2
+import matplotlib.pyplot as plt
+image=cv2.imread("noise.jpg",cv2.IMREAD_GRAYSCALE)
+if image is None:
+ print("Error in reading the image!")
+ exit()
+else:
+ print("Image loaded successfully")
+filtered_img=cv2.medianBlur(image,5)
+plt.subplot(1,2,1)
+plt.imshow(image,cmap='gray')
+
+plt.title("Original Image")
+plt.axis('off')
+plt.subplot(1,2,2)
+plt.imshow(filtered_img,cmap='gray')
+plt.title("Median Filtered Image")
+plt.axis('off')
+plt.show()
+
+
+
+-----------------------------------------------------------------------------------------------
+
+
+
+
+5) Write equation of ideal/Butterworth/Gaussian low pass filter transfer
+   function.
+   Perform low pass filtering operations in frequency domain.
+
+
+
+
+i) Ideal low pass filter
+
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Step 1: Load Image
+image = cv2.imread('lena.jpeg', cv2.IMREAD_GRAYSCALE)  # Read the input image
+if image is None:
+    print("Image not found!")
+    exit()
+
+rows, cols = image.shape
+print("Image shape:", rows, cols)
+xx, yy = rows // 2, cols // 2
+print("Half number of rows and columns:", xx, yy)
+
+# Step 2: Perform Fourier Transform
+dft = np.fft.fft2(image)
+dft_shift = np.fft.fftshift(dft)  # Shift zero frequency component to center
+spectrum = np.log(1 + np.abs(dft_shift))  # Compute log spectrum for better visualization
+
+# Step 3: Create Ideal Low-Pass Filter (ILPF)
+D0 = 10  # Cutoff frequency
+mask = np.zeros((rows, cols), np.uint8)
+
+for u in range(rows):
+    for v in range(cols):
+        distance = np.sqrt((u - xx) ** 2 + (v - yy) ** 2)
+        if distance <= D0:
+            mask[u, v] = 1  # Allow low frequencies
+        else:
+            mask[u, v] = 0  # Block high frequencies
+
+# Step 4: Apply ILPF (Transfer Function)
+filtered_dft = dft_shift * mask  # Multiply frequency domain representation with mask
+filtered_logspectrum = np.log(1 + np.abs(filtered_dft))  # Compute log magnitude for visualization
+
+# Step 5: Perform Inverse Fourier Transform
+idft_shift = np.fft.ifftshift(filtered_dft)  # Shift frequencies back to original
+img_filtered = np.fft.ifft2(idft_shift)  # Convert back to spatial domain
+img_filtered = np.abs(img_filtered)  # Take absolute values to obtain real image
+
+# Step 6: Display the results
+plt.figure(figsize=(20, 8))
+
+# Plot input image
+plt.subplot(2, 3, 1)
+plt.imshow(image, cmap="gray")
+plt.title("Input Image")
+plt.axis("off")
+
+# Plot center shifted spectrum of input image
+plt.subplot(2, 3, 2)
+plt.imshow(np.abs(dft_shift), cmap="gray")
+plt.title("Center Shifted Image Spectrum")
+plt.axis("off")
+
+# Plot shifted log spectrum of input image
+plt.subplot(2, 3, 3)
+plt.imshow(spectrum, cmap="gray")
+plt.title("Log Transformed Image Spectrum")
+plt.axis("off")
+
+# Plot filter transfer function
+plt.subplot(2, 3, 4)
+plt.imshow(mask, cmap="gray")
+plt.title("Ideal LPF Transfer Function")
+plt.axis("off")
+
+# Plot filtered image spectrum
+plt.subplot(2, 3, 5)
+plt.imshow(filtered_logspectrum, cmap="gray")
+plt.title("Filtered Image Spectrum")
+plt.axis("off")
+
+# Plot filtered image
+plt.subplot(2, 3, 6)
+plt.imshow(img_filtered, cmap="gray")
+plt.title(f"Low Pass Filtered Image (D0={D0})")
+plt.axis("off")
+
+plt.show()
+
+
+
+
+
+
+ii) Butterworth Low pass filter
+
+code-
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Step 1: Load Image
+image = cv2.imread('lena.jpeg', cv2.IMREAD_GRAYSCALE)  # Replace with your image path
+if image is None:
+    print("Image not found!")
+    exit()
+
+M, N = image.shape
+P, Q = M // 2, N // 2  # Center of the image
+
+# Step 2: Perform Fourier Transform
+dft = np.fft.fft2(image)
+dft_shift = np.fft.fftshift(dft)  # Shift zero frequency component to center
+spectrum = np.log(1 + np.abs(dft_shift))  # Compute log spectrum for visualization
+
+# Step 3: Create Butterworth Low-Pass Filter (BLPF)
+D0 = 30  # Cutoff frequency
+n = 2     # Order of the Butterworth filter
+
+# Create meshgrid for u and v values
+u = np.fft.fftfreq(M) * M
+v = np.fft.fftfreq(N) * N
+u, v = np.meshgrid(u, v)
+
+# Calculate distance in the frequency domain
+distance = np.sqrt((u - P)**2 + (v - Q)**2)
+
+# Apply Butterworth formula
+mask = 1 / (1 + (distance / D0)**(2 * n))
+
+# Step 4: Apply BLPF (Transfer Function)
+filtered_dft = dft_shift * mask  # Multiply frequency domain representation with mask
+filtered_logspectrum = np.log(1 + np.abs(filtered_dft))  # Compute log magnitude for visualization
+
+# Step 5: Perform Inverse Fourier Transform
+idft_shift = np.fft.ifftshift(filtered_dft)  # Shift frequencies back to original position
+img_filtered = np.fft.ifft2(idft_shift)     # Convert back to spatial domain
+img_filtered = np.abs(img_filtered)         # Take absolute values to obtain real image
+
+# Step 6: Display Results
+plt.figure(figsize=(20, 8))
+
+# Plot input image
+plt.subplot(2, 3, 1)
+plt.imshow(image, cmap="gray")
+plt.title("Input Image")
+plt.axis("off")
+
+# Plot center shifted spectrum of input image
+plt.subplot(2, 3, 2)
+plt.imshow(np.abs(dft_shift), cmap="gray")
+plt.title("Center Shifted Image Spectrum")
+plt.axis("off")
+
+# Plot shifted log spectrum of input image
+plt.subplot(2, 3, 3)
+plt.imshow(spectrum, cmap="gray")
+plt.title("Log Transformed Image Spectrum")
+plt.axis("off")
+
+# Plot filter transfer function (Butterworth LPF)
+plt.subplot(2, 3, 4)
+plt.imshow(mask, cmap="gray")
+plt.title("Butterworth LPF Transfer Function")
+plt.axis("off")
+
+# Plot filtered image spectrum
+plt.subplot(2, 3, 5)
+plt.imshow(filtered_logspectrum, cmap="gray")
+plt.title("Filtered Image Spectrum")
+plt.axis("off")
+
+# Plot filtered image
+plt.subplot(2, 3, 6)
+plt.imshow(img_filtered, cmap="gray")
+plt.title(f"Butterworth LP Filtered Image for D0={D0} and n={n}")
+plt.axis("off")
+
+plt.show()
+
+
+
+
+
+
+
+
+iii) Gaussian low pass filter-
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Step 1: Load Image
+image = cv2.imread('lena.jpeg', cv2.IMREAD_GRAYSCALE)  # Replace with your image path
+if image is None:
+    print("Image not found!")
+    exit()
+
+rows, cols = image.shape
+P, Q = rows // 2, cols // 2  # Center of the image
+
+# Step 2: Perform Fourier Transform
+dft = np.fft.fft2(image)
+dft_shift = np.fft.fftshift(dft)  # Shift zero frequency component to center
+spectrum = np.log(1 + np.abs(dft_shift))  # Compute log spectrum for visualization
+
+# Step 3: Create Gaussian Low-Pass Filter (GLPF)
+cutoff = 10  # Cutoff frequency
+mask = np.zeros((rows, cols), np.float32)
+
+# Using meshgrid for vectorized computation
+u = np.fft.fftfreq(rows) * rows
+v = np.fft.fftfreq(cols) * cols
+u, v = np.meshgrid(u, v)
+
+# Calculate distance in the frequency domain
+distance = np.sqrt((u - P)**2 + (v - Q)**2)
+
+# Apply Gaussian filter formula
+mask = np.exp(-(distance**2) / (2 * (cutoff**2)))
+
+# Step 4: Apply GLPF (Transfer Function)
+filtered_dft = dft_shift * mask  # Multiply frequency domain representation with mask
+filtered_logspectrum = np.log(1 + np.abs(filtered_dft))  # Compute log magnitude for visualization
+
+# Step 5: Perform Inverse Fourier Transform
+idft_shift = np.fft.ifftshift(filtered_dft)  # Shift frequencies back to original position
+img_filtered = np.fft.ifft2(idft_shift)     # Convert back to spatial domain
+img_filtered = np.abs(img_filtered)         # Take absolute values to obtain real image
+
+# Step 6: Display Results
+plt.figure(figsize=(20, 10))
+
+# Plot input image
+plt.subplot(2, 3, 1)
+plt.imshow(image, cmap="gray")
+plt.title("Input Image")
+plt.axis("off")
+
+# Plot center shifted spectrum of input image
+plt.subplot(2, 3, 2)
+plt.imshow(np.abs(dft_shift), cmap="gray")
+plt.title("Center Shifted Image Spectrum")
+plt.axis("off")
+
+# Plot shifted log spectrum of input image
+plt.subplot(2, 3, 3)
+plt.imshow(spectrum, cmap="gray")
+plt.title("Log Transformed Image Spectrum")
+plt.axis("off")
+
+# Plot filter transfer function (Gaussian LPF)
+plt.subplot(2, 3, 4)
+plt.imshow(mask, cmap="gray")
+plt.title("Gaussian LPF Transfer Function")
+plt.axis("off")
+
+# Plot filtered image spectrum
+plt.subplot(2, 3, 5)
+plt.imshow(filtered_logspectrum, cmap="gray")
+plt.title("Filtered Image Spectrum")
+plt.axis("off")
+
+# Plot filtered image
+plt.subplot(2, 3, 6)
+plt.imshow(img_filtered, cmap="gray")
+plt.title(f"Gaussian Low-Pass Filtered Image for D0={cutoff}")
+plt.axis("off")
+
+plt.show()
+
+
+
+
+
+-----------------------------------------------------------------------------------------------
+
+
+
+
+6)Perform following morphological operattion of digital image:
+Explain in brief (with equations)
+1.Dilation
+2.Erosion
+3.Opening
+4.Closing
+5.Boundary Extraction
+6.Hit or Miss transformation
+
+
+
+
+
+
+i) erosion, dilation , opening  and closing -
+code-
+#Perform dilation and erosion
+import numpy as np
+import cv2
+import matplotlib.pyplot as plt
+image=cv2.imread("bubble.jpeg",cv2.IMREAD_GRAYSCALE)
+
+#create a binary image having (0's and 1's)
+#image=np.zeros((10,10),dtype=np.uint8)
+image[3:7,3:7]=255 #add white square in middle
+print("Input Image:")
+print(image)
+#define structuring element or kernel
+kernel=np.ones((3,3),np.uint8)
+#Perform dilation
+dilation=cv2.dilate(image,kernel,iterations=1)
+print("Dilated image:")
+print(dilation)
+#Perform erosion
+erosion=cv2.erode(image,kernel, iterations=1)
+print("Eroded image:")
+print(erosion)
+#Perform opening 
+erode=cv2.erode(image,kernel,iterations=1)
+opening=cv2.dilate(erode,kernel,iterations=1)
+#Perform closing
+dilate=cv2.dilate(image,kernel,iterations=1)
+closing=cv2.erode(dilate,kernel,iterations=1)
+#Show the original image
+plt.subplot(2,3,1)
+plt.imshow(image,cmap="gray")
+plt.title('Original Image:')
+
+#Show to eroded image
+plt.subplot(2,3,2)
+plt.imshow(erosion,cmap="gray")
+plt.title('Eroded Image:')
+
+#Show the dilated image
+plt.subplot(2,3,3)
+plt.imshow(opening,cmap="gray")
+plt.title('Opening Image:')
+
+#Show the original image
+plt.subplot(2,3,4)
+plt.imshow(image,cmap="gray")
+plt.title('Original Image:')
+
+#Show to eroded image
+plt.subplot(2,3,5)
+plt.imshow(dilation,cmap="gray")
+plt.title('Dilated Image:')
+
+#Show the dilated image
+plt.subplot(2,3,6)
+plt.imshow(closing,cmap="gray")
+plt.title('Closing Image:')
+plt.show()
+
+
+
+
+
+
+
+
+ii) Boundary Extraction-
+code-
+import numpy as np
+import cv2
+import matplotlib.pyplot as plt
+
+# Define kernel
+kernel = np.ones((5, 5), np.uint8)
+
+# Load the image
+image = cv2.imread("circle.jpeg", cv2.IMREAD_GRAYSCALE)
+
+# Perform erosion
+eroded = cv2.erode(image, kernel, iterations=1)
+
+# Boundary extraction: Subtract the eroded image from the original
+boundary = image - eroded
+
+# Plotting the results
+plt.subplot(1, 3, 1)
+plt.imshow(image, cmap='gray')
+plt.title("Input Image")
+plt.axis('off')
+
+plt.subplot(1, 3, 2)
+plt.imshow(eroded, cmap='gray')
+plt.title("Eroded Image")
+plt.axis('off')
+
+plt.subplot(1, 3, 3)
+plt.imshow(boundary, cmap='gray')
+plt.title("Boundary Extracted")
+plt.axis('off')
+
+plt.show()
+
+
+
+
+
+
+
+iii) hit and miss transformation-
+code-
+import numpy as np
+import cv2
+import matplotlib.pyplot as plt
+
+# Define a kernel for the Hit-and-Miss transform
+kernel = np.array(([0, 1, 0], [1, 1, 1], [0, 1, 0]), np.uint8)
+
+# Read the image in grayscale
+image = cv2.imread("circle.jpeg", cv2.IMREAD_GRAYSCALE)
+
+# Perform the Hit-and-Miss transformation
+hitmiss = cv2.morphologyEx(image, cv2.MORPH_HITMISS, kernel)
+
+# Display the result using matplotlib
+plt.subplot(1, 2, 1)
+plt.imshow(image, cmap='gray')
+plt.title('Original Image')
+
+plt.subplot(1, 2, 2)
+plt.imshow(hitmiss, cmap='gray')
+plt.title('Hit-and-Miss Transform')
+
+plt.show()
+
+
+--------------------------------------------------------------------------------------------------
+
+
+
+
+
+7)What do you understand by Edge in an image? Perform edge detection
+using prewitt and sobel operator.
+Plot Gx image, Gy image and , Edge Magnitude (Gr+Gy) image.
+
+
+
+Sobel operator-
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+# Read the image in grayscale
+image_path = "lena.jpg" # Replace with your image path
+image = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
+
+#define prewitt kernels
+
+
+#sobel kernel
+sobel_x=np.array([[-1,0,1],[-2,0,2],[-1,0,1]])
+sobel_y=np.array([[-1,-2,-1],[0,0,0],[1,2,1]])
+
+#get x gradient image
+Gx=cv2.filter2D(image,-1,sobel_x)
+#get y gradient image
+Gy=cv2.filter2D(image,-1,sobel_y)
+
+sobel_image=Gx+Gy
+#sobel_image=np.sqrt((Gx*2)+(Gy*2))
+
+
+
+
+plt.figure(1)
+plt.subplot(1,4,1)
+plt.imshow(image,cmap="gray")
+plt.title("input image")
+plt.axis("off")
+
+plt.subplot(1,4,2)
+plt.imshow(Gx,cmap="gray")
+plt.title("x gradient image")
+plt.axis("off")
+
+plt.subplot(1,4,3)
+plt.imshow(Gy,cmap="gray")
+plt.title("y gradient image")
+plt.axis("off")
+
+plt.subplot(1,4,4)
+plt.imshow(sobel_image,cmap="gray")
+plt.title("sobel edge detected")
+plt.axis("off")
+
+
+plt.show()
+
+
+
+
+
+
+
+
+ii)Prewitt Operator-
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+# Read the image in grayscale
+image_path = "lena.jpg" # Replace with your image path
+image = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
+
+#define prewitt kernels
+
+
+#Previt kernel
+previt_y=np.array([[-1,0,1],[-2,0,2],[-1,0,1]])
+previt_x=np.array([[-1,-2,-1],[0,0,0],[1,2,1]])
+
+#get x gradient image
+Gx=cv2.filter2D(image,-1,previt_x)
+#get y gradient image
+Gy=cv2.filter2D(image,-1,previt_y)
+
+previt_image=Gx+Gy
+#sobel_image=np.sqrt((Gx*2)+(Gy*2))
+
+
+
+
+plt.figure(1)
+plt.subplot(1,4,1)
+plt.imshow(image,cmap="gray")
+plt.title("input image")
+plt.axis("off")
+
+plt.subplot(1,4,2)
+plt.imshow(Gx,cmap="gray")
+plt.title("x gradient image")
+plt.axis("off")
+
+plt.subplot(1,4,3)
+plt.imshow(Gy,cmap="gray")
+plt.title("y gradient image")
+plt.axis("off")
+
+plt.subplot(1,4,4)
+plt.imshow(previt_image,cmap="gray")
+plt.title("Previt edge detected")
+plt.axis("off")
+
+
+plt.show()
+
+
+
+
+
+-----------------------------------------------------------------------------------------------
+
+
+
+
+8) What do you understand by segmentation using Global thresholding.
+Perform histogram based image segmentation using Global thresholding.
+
+code-
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Step 1: Load the image
+image = cv2.imread('lena.jpg', cv2.IMREAD_GRAYSCALE)
+
+# Step 2: Calculate histogram
+hist = cv2.calcHist([image], [0], None, [256], [0, 256])
+
+# Step 3: Choose a global threshold
+T = 128  # You can change this manually or calculate it
+
+# Step 4: Apply thresholding
+# if pixel > T -> 255 (white), else -> 0 (black)
+_, segmented = cv2.threshold(image, T, 255, cv2.THRESH_BINARY)
+
+# Step 5: Display everything
+plt.figure(figsize=(12,6))
+
+plt.subplot(1,3,1)
+plt.imshow(image, cmap='gray')
+plt.title('Original Image')
+plt.axis('off')
+
+plt.subplot(1,3,2)
+plt.plot(hist)
+plt.title('Histogram')
+plt.xlabel('Pixel Intensity')
+plt.ylabel('Frequency')
+
+plt.subplot(1,3,3)
+plt.imshow(segmented, cmap='gray')
+plt.title(f'Segmented Image (Threshold = {T})')
+plt.axis('off')
+
+plt.tight_layout()
+plt.show()
+
+
+
+
+-----------------------------------------------------------------------------------------------
+
+
+
+
+9)Explain the concept of perceptron and basic terminologies (like inputs,
+weights, bias, activation function, output).
+Implement AND /OR gate using Single-layer perceptron.
+
+
+
+
+
+AND gate code-
+import numpy as np
+
+# AND Gate
+# Initialize parameters
+a = 1  # Learning rate
+w = np.array([0, 0])  # Weights
+b = 0  # Bias
+
+# Input features and target outputs
+X = np.array([[1, 1], [1, -1], [-1, 1], [-1, -1]])
+T = np.array([1, -1, -1, -1])
+
+print(f"Initial weights: {w}, Initial Bias: {b}\n")
+
+# Training for 2 epochs
+for epoch in range(2):
+    print(f"Epoch {epoch + 1}")
+    for i in range(len(X)):
+        yin = np.dot(w, X[i]) + b  # compute net input
+        y = np.sign(yin)           # Activation function (-1, 0, or 1)
+
+        # Update weights if the prediction is incorrect
+        if y != T[i]:
+            w += a * T[i] * X[i]
+            b += a * T[i]
+        print(f"x = {X[i]}, y = {y}, w = {w}, b = {b}")
+
+print(f"\nFinal Weights: {w}, Final Bias: {b}")
+
+
+
+
+
+
+OR gate code-
+
+import numpy as np
+
+# OR Gate
+# Initialize parameters
+a = 1
+w = np.array([0, 0])
+b = 0
+
+# Input features and target outputs
+X = np.array([[1, 1], [1, -1], [-1, 1], [-1, -1]])
+T = np.array([-1, 1, 1, 1])
+
+print(f"Initial weights: {w}, Initial Bias: {b}\n")
+
+# Training for 2 epochs
+for epoch in range(2):
+    print(f"Epoch {epoch + 1}")
+    for i in range(len(X)):
+        yin = np.dot(w, X[i]) + b  # compute net input
+        y = np.sign(yin)           # Activation function (-1, 0, or 1)
+        
+        # Update weights if prediction is incorrect
+        if y != T[i]:
+            w += a * T[i] * X[i]
+            b += a * T[i]
+        print(f"x = {X[i]}, y = {y}, w = {w}, b = {b}")
+
+print(f"\nFinal Weights: {w}, Final Bias: {b}")
+
+
+
+----------------------------------------------------------------------------------------------
+
